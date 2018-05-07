@@ -5,6 +5,7 @@
 	* textos español
 	* v 1.0.2
 	* changelog
+	- 1.0.4 permitir numeros negativos
 	- 1.0.3 poder decidir si comprueba o no el change en los select
 	- 1.0.2 poder decidir si comprueba o no el blur
 	- 1.0.1 opcion de maxdate
@@ -2323,7 +2324,7 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Street Number only"
 			},
 			number: {
-				regex: /^\d+$/,
+				regex: /^-?\d+$/,
 				message: "Use digits only"
 			},
 			numberSpace: {

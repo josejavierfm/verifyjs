@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2017
 	* textos español
-	* v 1.0.3
+	* v 1.0.4
 	* changelog
+	- 1.0.4 permitir numeros negativos
 	- 1.0.3 poder decidir si comprueba o no el change en los select
 	- 1.0.2 poder decidir si comprueba o no el blur
 	- 1.0.1 opcion de maxdate
@@ -2323,7 +2324,7 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Solo numero calle"
 			},
 			number: {
-				regex: /^\d+$/,
+				regex: /^-?\d+$/,
 				message: "Usa solo numeros"
 			},
 			numberSpace: {
@@ -2463,12 +2464,12 @@ function padverify_j_manual(width, tstring, padding) {
 				
 				var recoma = new RegExp("\\,","g");
 				vStr=vStr.replace(recoma,'.');
-				var re = new RegExp("^\\d+(\\"+separador_decimal+"\\d+)?$");
+				var re = new RegExp("^-?\\d+(\\"+separador_decimal+"\\d+)?$");
 				//if(!vStr.match(/^\d+(,\d{3})*(\.\d+)?$/))
 				if(!vStr.match(re))
 				return "Valor decimal invalido vvv"+separador_decimal+padverify_j_manual(places,"","d");
 				
-				var v = parseFloat(vStr.replace(/[^\d\.]/g,''));//en javascript tiene que tener el punto como decimal
+				var v = parseFloat(vStr.replace(/[^-?\d\.]/g,''));//en javascript tiene que tener el punto como decimal
 				var factor = Math.pow(10,places);
 				
 				v = (Math.round(v*factor)/factor);
