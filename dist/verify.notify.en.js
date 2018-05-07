@@ -1,10 +1,11 @@
 /** Verify.js - v0.0.1 - 2013/06/12
 	* https://github.com/jpillora/verify
 	* Copyright (c) 2013 Jaime Pillora - MIT
-	* Modificado por José Javier Fdez 2017
+	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.0.2
+	* v 1.0.5
 	* changelog
+	- 1.0.5 reinicio del gotoerrorfocus en validar manual
 	- 1.0.4 permitir numeros negativos
 	- 1.0.3 poder decidir si comprueba o no el change en los select
 	- 1.0.2 poder decidir si comprueba o no el blur
@@ -1480,7 +1481,6 @@ function padverify_j_manual(width, tstring, padding) {
 			//for use with $(field).validate(callback);
 			validate: function(callback) {
 				if(!callback) callback = $.noop;
-				
 				var exec = new FieldExecution(this);
 				
 				exec.execute().done(function() {
@@ -1706,6 +1706,7 @@ function padverify_j_manual(width, tstring, padding) {
 			* ===================================== */
 			
 			validate: function(callback) {
+				gotoerror_focus_j_manual=false;
 				if(!callback) callback = $.noop;
 				
 				this.updateFields();
@@ -2464,13 +2465,13 @@ function padverify_j_manual(width, tstring, padding) {
 				
 				var recoma = new RegExp("\\,","g");
 				vStr=vStr.replace(recoma,'.');
-				var re = new RegExp("^\\d+(\\"+separador_decimal+"\\d+)?$");
+				var re = new RegExp("^-?\\d+(\\"+separador_decimal+"\\d+)?$");
 				//if(!vStr.match(/^\d+(,\d{3})*(\.\d+)?$/))
 				if(!vStr.match(re))
-				return "Invalid decimal value vvv"+separador_decimal_j_manual+padverify_j_manual(places,"","d");
+				return "Invalid decimal value vvv"+separador_decimal+padverify_j_manual(places,"","d");
 								
-				var v = parseFloat(vStr.replace(/[^\d\.]/g,'')),
-				factor = Math.pow(10,places);
+				var v = parseFloat(vStr.replace(/[^-?\d\.]/g,''));//en javascript tiene que tener el punto como decimal
+				var factor = Math.pow(10,places);
 				
 				v = (Math.round(v*factor)/factor);
 				r.field.val(v);
