@@ -5,6 +5,7 @@
 	* textos español
 	* v 1.0.2
 	* changelog
+	- 1.0.3 poder decidir si comprueba o no el change en los select
 	- 1.0.2 poder decidir si comprueba o no el blur
 	- 1.0.1 opcion de maxdate
 	- 1.0.0 ir al error de forma manual
@@ -1605,11 +1606,11 @@ function padverify_j_manual(width, tstring, padding) {
 			bindEvents: function() {
 				this.domElem
 				.on("keyup.jqv", "input", this.onKeyup)
-				.on("change.jqv", "input[type=text].hasDatepicker,select,[type=checkbox],[type=radio]", this.onValidate)
 				.on("submit.jqv", this.onSubmit)
 				.trigger("initialised.jqv");
 				if (comprobar_blur_j){
 					this.domElem
+					.on("change.jqv", "input[type=text].hasDatepicker,select,[type=checkbox],[type=radio]", this.onValidate)
 					.on("blur.jqv", "input[type=text]:not(.hasDatepicker),input:not([type].hasDatepicker)", this.onValidate)
 					.trigger("initialised.jqv");
 				}
