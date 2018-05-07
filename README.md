@@ -31,3 +31,9 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+2018 José Javier Fernández Mendoza
+Se separa en dos ficheros para ingles y español.
+Se deja de mantener la versión .min.js
+Incluye las mejoras que he ido haciendo a lo largo de los años para adaptarlo a mis necesidades.
