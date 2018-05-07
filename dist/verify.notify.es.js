@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.0.7
+	* v 1.0.8
 	* changelog
+	- 1.0.8 ahora puedes indicar a cada elemento su posicion con data-position="l|r|t|b"
 	- 1.0.7 icono en campo obligatorio si no esta deshabilitado
 	- 1.0.6 icono en campo obligatorio
 	- 1.0.5 reinicio del gotoerrorfocus en validar manual
@@ -211,9 +212,9 @@ function padverify_j_manual(width, tstring, padding) {
 		realign = function(alignment, inner, outer) {
 			if (alignment === 'l' || alignment === 't') {
 				return 0;
-				} else if (alignment === 'c' || alignment === 'm') {
+			} else if (alignment === 'c' || alignment === 'm') {
 				return outer / 2 - inner / 2;
-				} else if (alignment === 'r' || alignment === 'b') {
+			} else if (alignment === 'r' || alignment === 'b') {
 				return outer - inner;
 			}
 			throw "Invalid alignment";
@@ -305,9 +306,14 @@ function padverify_j_manual(width, tstring, padding) {
 					css[main] = 0;
 					if (align === 'middle') {
 						css.top = '45%';
-						} else if (align === 'center') {
-						css.left = '45%';
+						if (screen.width < 768) {
+							css.top = '25%';
 						} else {
+							css.top = '45%';
+						}
+					} else if (align === 'center') {
+						css.left = '45%';
+					} else {
 						css[align] = 0;
 					}
 					anchor.css(css).addClass("" + pluginClassName + "-corner");
@@ -343,12 +349,12 @@ function padverify_j_manual(width, tstring, padding) {
 						incr(css, pos, margin);
 					}
 				}
-				gap = Math.max(0, this.options.gap - (this.options.arrowShow ? arrowSize : 0));
+				arrowSize = (this.options.arrowShow ? this.options.arrowSize : 0);
+        			gap = Math.max(0, this.options.gap - arrowSize);
 				incr(css, oppFull, gap);
 				if (!this.options.arrowShow) {
 					this.arrow.hide();
 					} else {
-					arrowSize = this.options.arrowSize;
 					arrowCss = $.extend({}, css);
 					arrowColor = this.userContainer.css("border-color") || this.userContainer.css("background-color") || 'white';
 					for (_j = 0, _len1 = mainPositions.length; _j < _len1; _j++) {
@@ -387,10 +393,17 @@ function padverify_j_manual(width, tstring, padding) {
 			
 			Notification.prototype.getPosition = function() {
 				var pos, text, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+				var poselem='';
+				if (this.elem && this.elem[0] && this.elem[0].attributes && this.elem[0].attributes['data-position']){
+					poselem = this.elem[0].attributes['data-position'].value;
+				}
 				text = this.options.position || (this.elem ? this.options.elementPosition : this.options.globalPosition);
 				pos = parsePosition(text);
 				if (pos.length === 0) {
 					pos[0] = 'b';
+				}
+				if (poselem!==''){
+					pos[0] = poselem;
 				}
 				if (_ref = pos[0], __indexOf.call(mainPositions, _ref) < 0) {
 					throw "Must be one of [" + mainPositions + "]";
@@ -1967,10 +1980,6 @@ function padverify_j_manual(width, tstring, padding) {
 			execute: function() {
 				this._super();
 				
-				if(this.isPending()) {
-					this.warn("pending... (waiting for %s)", this.prevExec.name);
-					return this.reject();
-				}
 				
 				//execute rules
 				var ruleParams = ruleManager.parseElement(this.element);
@@ -2336,7 +2345,7 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Usa solo numeros y espacios"
 			},
 			postcode: {
-				regex: /^\d{4}$/,
+				regex: /^\d{5}$/,
 				message: "Codigo postal invalido"
 			},
 			date: {
@@ -2421,13 +2430,11 @@ function padverify_j_manual(width, tstring, padding) {
 				r.val(r.val().replace(/\D/g,''));
 				var v = r.val();
 				if(!v.match(/^\+?[\d\s]+$/))
-				return "Usa solos numeros y espacios";
+				return "Usa solos numeros sin espacios";
 				if(v.match(/^\+/))
 				return true; //allow all international
-				if(!v.match(/^0/))
-				return "Numero tiene que empezar por 0";
-				if(v.replace(/\s/g,"").length !== 10)
-				return "Debe tener 10 digitos";
+				if(v.replace(/\s/g,"").length !== 9)
+				return "Debe tener 9 digitos";
 				return true;
 			},
 			size: function(r){
