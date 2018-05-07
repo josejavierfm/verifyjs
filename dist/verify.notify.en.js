@@ -2,10 +2,15 @@
 	* https://github.com/jpillora/verify
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2017
-	* textos ingles
-	* v 1.0.1
+	* textos español
+	* v 1.0.2
+	* changelog
+	- 1.0.2 poder decidir si comprueba o no el blur
+	- 1.0.1 opcion de maxdate
+	- 1.0.0 ir al error de forma manual
 */
 var gotoerror_focus_j_manual=false;
+var comprobar_blur_j = false;
 
 function padverify_j_manual(width, tstring, padding) { 
   return (width <= tstring.length) ? tstring : padverify_j_manual(width, padding + tstring, padding)
@@ -1600,10 +1605,14 @@ function padverify_j_manual(width, tstring, padding) {
 			bindEvents: function() {
 				this.domElem
 				.on("keyup.jqv", "input", this.onKeyup)
-				.on("blur.jqv", "input[type=text]:not(.hasDatepicker),input:not([type].hasDatepicker)", this.onValidate)
 				.on("change.jqv", "input[type=text].hasDatepicker,select,[type=checkbox],[type=radio]", this.onValidate)
 				.on("submit.jqv", this.onSubmit)
 				.trigger("initialised.jqv");
+				if (comprobar_blur_j){
+					this.domElem
+					.on("blur.jqv", "input[type=text]:not(.hasDatepicker),input:not([type].hasDatepicker)", this.onValidate)
+					.trigger("initialised.jqv");
+				}
 			},
 			
 			unbindEvents: function() {
