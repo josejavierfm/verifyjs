@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.0.8
+	* v 1.0.9
 	* changelog
+	- 1.0.9 el icono de required se maneja tambien en el evento blur
 	- 1.0.8 ahora puedes indicar a cada elemento su posicion con data-position="l|r|t|b"
 	- 1.0.7 icono en campo obligatorio si no esta deshabilitado
 	- 1.0.6 icono en campo obligatorio
@@ -2636,9 +2637,15 @@ if (mostraricono_j_campoobligatorio){
 		$(this).change(function(){
 			icono_required_j($(this));
 		});
+		$(this).blur(function(){
+			icono_required_j($(this));
+		});
 	});
 	$('select[data-validate^="required"]').each(function() {
 		$(this).change(function(){
+			icono_required_j($(this));
+		});
+		$(this).blur(function(){
 			icono_required_j($(this));
 		});
 	});
