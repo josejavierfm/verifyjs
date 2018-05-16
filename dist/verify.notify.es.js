@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.0.9
+	* v 1.1.0
 	* changelog
+	- 1.1.0 nuevo tipo que no permite urls, para comentarios de contacto
 	- 1.0.9 el icono de required se maneja tambien en el evento blur
 	- 1.0.8 ahora puedes indicar a cada elemento su posicion con data-position="l|r|t|b"
 	- 1.0.7 icono en campo obligatorio si no esta deshabilitado
@@ -2333,6 +2334,10 @@ function padverify_j_manual(width, tstring, padding) {
 				regex: /^[0-9A-Za-z]+$/,
 				message: "Usa solo numeros y letras"
 			},
+			sinsimbolos: {
+				regex: /^[0-9A-Za-z\n]+$/,
+				message: "Usa solo numeros y letras, no permite simbolos"
+			},
 			street_number: {
 				regex: /^\d+[A-Za-z]?(-\d+)?[A-Za-z]?$/,
 				message: "Solo numero calle"
@@ -2625,9 +2630,11 @@ function comprobar_iconos_despues_valores_j(){
 	if (mostraricono_j_campoobligatorio){
 		$('input[data-validate^="required"]').each(function() {
 			icono_required_j($(this));
-				  
 		});
 		$('select[data-validate^="required"]').each(function() {
+			icono_required_j($(this));
+		});
+		$('textarea[data-validate^="required"]').each(function() {
 			icono_required_j($(this));
 		});
 	}
@@ -2642,6 +2649,14 @@ if (mostraricono_j_campoobligatorio){
 		});
 	});
 	$('select[data-validate^="required"]').each(function() {
+		$(this).change(function(){
+			icono_required_j($(this));
+		});
+		$(this).blur(function(){
+			icono_required_j($(this));
+		});
+	});
+	$('textarea[data-validate^="required"]').each(function() {
 		$(this).change(function(){
 			icono_required_j($(this));
 		});
