@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.0
+	* v 1.1.1
 	* changelog
+	- 1.1.1 nuevo tipo solo con letras y espacios
 	- 1.1.0 nuevo tipo que no permite urls, para comentarios de contacto
 	- 1.0.9 el icono de required se maneja tambien en el evento blur
 	- 1.0.8 ahora puedes indicar a cada elemento su posicion con data-position="l|r|t|b"
@@ -2335,8 +2336,12 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Usa solo numeros y letras"
 			},
 			sinsimbolos: {
-				regex: /^[0-9A-Za-z\n]+$/,
+				regex: /^[0-9A-Za-z\n ]+$/,
 				message: "Usa solo numeros y letras, no permite simbolos"
+			},
+			texto: {
+				regex: /^[0-9A-Za-z ]+$/,
+				message: "Usa solo numeros y letras, no permite simbolos ni saltos de linea"
 			},
 			street_number: {
 				regex: /^\d+[A-Za-z]?(-\d+)?[A-Za-z]?$/,
