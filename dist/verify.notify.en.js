@@ -5,6 +5,7 @@
 	* textos español
 	* v 1.1.2
 	* changelog
+	- 1.1.3 mindate y mindatefield, donde se pasa un id
 	- 1.1.2 cambio de icono para required y nuevo icono si es correcto
 	- 1.1.1 nuevo tipo solo con letras y espacios
 	- 1.1.0 nuevo tipo que no permite urls, para comentarios de contacto
@@ -2529,6 +2530,30 @@ function padverify_j_manual(width, tstring, padding) {
 			   if(current >= endDate)
 				return "Date must come before "+r.args[0];
 
+			  return true;
+			},
+			minDate: function(r) {
+			   var current = $.verify.utils.parseDate(r.val());
+			  if(!current)
+				return "Invalid date";
+			  var endDate = $.verify.utils.parseDate(r.args[0]);
+			  if(!endDate)
+				return "Invalid date";
+			   if(current <= endDate)
+				return "Date must come after "+r.args[0];
+			  return true;
+			},
+			minDateField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current = $.verify.utils.parseDate(r.val());
+			   if(!current)
+				return "Invalid date";
+			  var firstDate = $.verify.utils.parseDate(c.val());
+			  if(firstDate!=""){
+				 if(current <= firstDate)
+					return "Date must come after "+n+" field";
+			  }
 			  
 			  return true;
 			},
