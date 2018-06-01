@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.4
+	* v 1.1.5
 	* changelog
+	- 1.1.5 fueza comprobar campos requeridos al terminar de cargar pagina
 	- 1.1.4 minEqualDate ,maxEqualDate y minEqualDateField,maxDateField,maxEqualDateField
 	- 1.1.3 minDate y minDateField, donde se pasa un id
 	- 1.1.2 cambio de icono para required y nuevo icono si es correcto
@@ -2774,3 +2775,10 @@ if (mostraricono_j_campoobligatorio){
 	});
 	comprobar_iconos_despues_valores_j();
 }
+$( document ).ready(function() {
+	if (mostraricono_j_campoobligatorio){
+		$('input[data-validate^="required"]').trigger("change");
+		$('select[data-validate^="required"]').trigger("change");
+		$('textarea[data-validate^="required"]').trigger("change");
+	}
+});
