@@ -3,9 +3,10 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.3
+	* v 1.1.4
 	* changelog
-	- 1.1.3 mindate y mindatefield, donde se pasa un id
+	- 1.1.4 minEqualDate ,maxEqualDate y minEqualDateField,maxDateField,maxEqualDateField
+	- 1.1.3 minDate y minDateField, donde se pasa un id
 	- 1.1.2 cambio de icono para required y nuevo icono si es correcto
 	- 1.1.1 nuevo tipo solo con letras y espacios
 	- 1.1.0 nuevo tipo que no permite urls, para comentarios de contacto
@@ -2530,6 +2531,20 @@ function padverify_j_manual(width, tstring, padding) {
 			  
 			  return true;
 			},
+			 maxEqualDate: function(r) {
+			   var current = $.verify.utils.parseDate(r.val());
+			  if(!current)
+				return "Fecha invalida";
+
+			  var endDate = $.verify.utils.parseDate(r.args[0]);
+			  if(!endDate)
+				return "Fecha invalida";
+			   if(current > endDate)
+				return "La fecha tiene que ser menor o igual a "+r.args[0];
+
+			  
+			  return true;
+			},
 			minDate: function(r) {
 			   var current = $.verify.utils.parseDate(r.val());
 			  if(!current)
@@ -2540,6 +2555,20 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 			   if(current <= endDate)
 				return "La fecha tiene que ser mayor a "+r.args[0];
+
+			  
+			  return true;
+			},
+			minEqualDate: function(r) {
+			   var current = $.verify.utils.parseDate(r.val());
+			  if(!current)
+				return "Fecha invalida";
+
+			  var endDate = $.verify.utils.parseDate(r.args[0]);
+			  if(!endDate)
+				return "Fecha invalida";
+			   if(current < endDate)
+				return "La fecha tiene que ser mayor o igual a "+r.args[0];
 
 			  
 			  return true;
@@ -2555,6 +2584,51 @@ function padverify_j_manual(width, tstring, padding) {
 			  if(firstDate!=""){
 				 if(current <= firstDate)
 					return "La fecha tiene que ser mayor al campo "+n;
+			  }
+			  
+			  return true;
+			},
+			minEqualDateField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current = $.verify.utils.parseDate(r.val());
+			   if(!current)
+				return "Fecha invalida";
+
+			  var firstDate = $.verify.utils.parseDate(c.val());
+			  if(firstDate!=""){
+				 if(current < firstDate)
+					return "La fecha tiene que ser mayor o igual al campo "+n;
+			  }
+			  
+			  return true;
+			},
+			maxDateField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current = $.verify.utils.parseDate(r.val());
+			   if(!current)
+				return "Fecha invalida";
+
+			  var firstDate = $.verify.utils.parseDate(c.val());
+			  if(firstDate!=""){
+				 if(current >= firstDate)
+					return "La fecha tiene que ser menor al campo "+n;
+			  }
+			  
+			  return true;
+			},
+			maxEqualDateField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current = $.verify.utils.parseDate(r.val());
+			   if(!current)
+				return "Fecha invalida";
+
+			  var firstDate = $.verify.utils.parseDate(c.val());
+			  if(firstDate!=""){
+				 if(current > firstDate)
+					return "La fecha tiene que ser menor o igual al campo "+n;
 			  }
 			  
 			  return true;
