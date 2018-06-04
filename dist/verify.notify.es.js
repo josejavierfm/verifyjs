@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.5
+	* v 1.1.6
 	* changelog
+  - 1.1.6 en evento blur de campos obligatorios ahora muestra un icono si es correcto o no, no solo si está relleno
 	- 1.1.5 fueza comprobar campos requeridos al terminar de cargar pagina
 	- 1.1.4 minEqualDate ,maxEqualDate y minEqualDateField,maxDateField,maxEqualDateField
 	- 1.1.3 minDate y minDateField, donde se pasa un id
@@ -25,6 +26,7 @@
 var mostraricono_j_campoobligatorio=true;
 var gotoerror_focus_j_manual=false;
 var comprobar_blur_j = false;
+var j_error_class_name="errorVNjs";
 
 function padverify_j_manual(width, tstring, padding) { 
   return (width <= tstring.length) ? tstring : padverify_j_manual(width, padding + tstring, padding)
@@ -1046,7 +1048,7 @@ function padverify_j_manual(width, tstring, padding) {
 		// Whether to skip the hidden fields
 		skipDisabledFields: true,
 		// What class name to apply to the 'errorContainer'
-		errorClass: "errorVNjs",
+		errorClass: j_error_class_name,
 		// Filter method to find element to apply error class
 		errorContainer: function (e) {
 			return e;
@@ -1502,10 +1504,10 @@ function padverify_j_manual(width, tstring, padding) {
 			},
 			
 			//for use with $(field).validate(callback);
-			validate: function(callback) {
+			validate: function(callback,showValField) {//console.log(444);console.log(showValField);
 				if(!callback) callback = $.noop;
 				var exec = new FieldExecution(this);
-				
+				exec.showpop=showValField;
 				exec.execute().done(function() {
 					callback(true);
 					}).fail(function() {
@@ -1535,7 +1537,7 @@ function padverify_j_manual(width, tstring, padding) {
 				
 			},
 			
-			handleResult: function(exec) {
+			handleResult: function(exec,showpop) {//console.log(000);console.log(showpop);
 				var opts = this.options,
 				reskinElem = opts.reskinContainer(this.domElem);
 				
@@ -1549,7 +1551,8 @@ function padverify_j_manual(width, tstring, padding) {
 				}
 				
 				//show prompt
-				if(opts.showPrompt)
+				if (showpop!==false){showpop=true;}
+				if(opts.showPrompt && showpop)
 				opts.prompt(reskinElem, exec.response);
 				
 				//toggle error classes
@@ -1563,6 +1566,9 @@ function padverify_j_manual(width, tstring, padding) {
 				[this.form.name,this.name].join(' '),
 				exec.success ? 'Valid' : exec.response ? '"'+exec.response+'"' : 'Silent Fail'
 				);
+				if (mostraricono_j_campoobligatorio){
+					icono_required_j($('[name="'+this.name+'"]'));
+				}
 			},
 			
 			//listening for 'validate' event
@@ -1591,7 +1597,7 @@ function padverify_j_manual(width, tstring, padding) {
 				* Instance variables
 			* ===================================== */
 			type: "ValidationForm",
-			
+			showpop:true,
 			init: function(domElem, options) {
 				//sanity checks
 				this._super(domElem);
@@ -1691,7 +1697,7 @@ function padverify_j_manual(width, tstring, padding) {
 				this.submitResult === undefined) {
 					
 					this.submitPending = true;
-					this.validate(this.doSubmit);
+					this.validate(this.doSubmit,true);
 					
 					//have result
 					} else if (this.submitResult !== undefined) {
@@ -1716,25 +1722,25 @@ function padverify_j_manual(width, tstring, padding) {
 			},
 			
 			//user triggered validate field event
-			onValidate: function(event) {
+			onValidate: function(event,showOnVal) {//console.log(111);console.log(showOnVal);
 				var domElem = $(event.currentTarget);
 				var field = domElem.data('verify') || this.updateField(domElem);
 				field.log("validate");
-				field.validate($.noop);
+				field.validate($.noop,showOnVal);
 			},
 			
 			/* ===================================== *
 				* Validate Form
 			* ===================================== */
 			
-			validate: function(callback) {
+			validate: function(callback,showValidate) {//console.log(222);console.log(showValidate);
 				gotoerror_focus_j_manual=false;
 				if(!callback) callback = $.noop;
 				
 				this.updateFields();
 				
 				var exec = new FormExecution(this);
-				
+				exec.showpop=showValidate;
 				exec.execute().done(function() {
 					callback(true);
 					}).fail(function() {
@@ -1974,7 +1980,7 @@ function padverify_j_manual(width, tstring, padding) {
 		//set in plugin scope
 		FieldExecution = Execution.extend({
 			type: "FieldExecution",
-			
+			showpop:true,
 			init: function(field, parent) {
 				this._super(field, parent);
 				if(parent instanceof FormExecution)
@@ -2049,7 +2055,7 @@ function padverify_j_manual(width, tstring, padding) {
 					exec = children[i];
 					break;
 				}
-				this.element.handleResult(exec);
+				this.element.handleResult(exec,this.showpop);
 			}
 			
 		});
@@ -2205,6 +2211,7 @@ function padverify_j_manual(width, tstring, padding) {
 					
 					this.log("STARTING ", field.name);
 					exec = new FieldExecution(field, this);
+					exec.showpop=true;
 					exec.execute();
 				}
 				
@@ -2238,11 +2245,11 @@ function padverify_j_manual(width, tstring, padding) {
 		});
 		
 	})();
-	$.fn.validate = function(callback) {
+	$.fn.validate = function(callback,showV) {//console.log(333);console.log(showV);
 		var validator = $(this).data('verify');
-		if(validator)
-		validator.validate(callback);
-		else
+		if(validator){
+		validator.validate(callback,showV);
+		}else
 		warn("element does not have verifyjs attached");
 	};
 	
@@ -2393,7 +2400,7 @@ function padverify_j_manual(width, tstring, padding) {
 						if (group.is(":checked"))
 						break;
 						
-						if (group.size() === 1)
+						if (group.length === 1)
 						return r.messages.single;
 						
 						return r.messages.multiple;
@@ -2741,10 +2748,11 @@ function icono_required_j(obj){
 			obj.css("background-image", icono_j_required_background_image);
 		}else{
 			
+			if (obj[0].className!=j_error_class_name){
 				obj.css("background-image", icono_j_required_background_image_ok);
-			
-				//obj.css("background-image", icono_j_required_background_image_bad);
-			
+			}else{
+				obj.css("background-image", icono_j_required_background_image_bad);
+			}
 		
 		}
 	}
@@ -2764,35 +2772,26 @@ function comprobar_iconos_despues_valores_j(){
 }
 if (mostraricono_j_campoobligatorio){
 	$('input[data-validate^="required"]').each(function() {
-		$(this).change(function(){
-			icono_required_j($(this));
-		});
 		$(this).blur(function(){
-			icono_required_j($(this));
+			$(this).validate(null,false);
 		});
 	});
 	$('select[data-validate^="required"]').each(function() {
-		$(this).change(function(){
-			icono_required_j($(this));
-		});
 		$(this).blur(function(){
-			icono_required_j($(this));
+			$(this).validate(null,false);
 		});
 	});
 	$('textarea[data-validate^="required"]').each(function() {
-		$(this).change(function(){
-			icono_required_j($(this));
-		});
 		$(this).blur(function(){
-			icono_required_j($(this));
+			$(this).validate(null,false);
 		});
 	});
-	comprobar_iconos_despues_valores_j();
 }
 $( document ).ready(function() {
 	if (mostraricono_j_campoobligatorio){
 		$('input[data-validate^="required"]').trigger("change");
 		$('select[data-validate^="required"]').trigger("change");
 		$('textarea[data-validate^="required"]').trigger("change");
+		comprobar_iconos_despues_valores_j();
 	}
 });
