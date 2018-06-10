@@ -3,9 +3,10 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.6
+	* v 1.1.7
 	* changelog
-  - 1.1.6 en evento blur de campos obligatorios ahora muestra un icono si es correcto o no, no solo si está relleno
+    - 1.1.7 bug si no es required y falla otro campo
+    - 1.1.6 en evento blur de campos obligatorios ahora muestra un icono si es correcto o no, no solo si está relleno
 	- 1.1.5 fueza comprobar campos requeridos al terminar de cargar pagina
 	- 1.1.4 minEqualDate ,maxEqualDate y minEqualDateField,maxDateField,maxEqualDateField
 	- 1.1.3 minDate y minDateField, donde se pasa un id
@@ -1567,7 +1568,7 @@ function padverify_j_manual(width, tstring, padding) {
 				[this.form.name,this.name].join(' '),
 				exec.success ? 'Valid' : exec.response ? '"'+exec.response+'"' : 'Silent Fail'
 				);
-				if (mostraricono_j_campoobligatorio){
+				if (mostraricono_j_campoobligatorio && !exec.success){
 					icono_required_j($('[name="'+this.name+'"]'));
 				}
 			},
