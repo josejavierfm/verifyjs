@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.7
+	* v 1.1.8
 	* changelog
+	- 1.1.8 nueva variable para personalizar los radio y diferenciar los required y variable para controlar el cambio de disabled
     - 1.1.7 bug si no es required y falla otro campo
     - 1.1.6 en evento blur de campos obligatorios ahora muestra un icono si es correcto o no, no solo si está relleno
 	- 1.1.5 fueza comprobar campos requeridos al terminar de cargar pagina
@@ -28,6 +29,8 @@ var mostraricono_j_campoobligatorio=true;
 var gotoerror_focus_j_manual=false;
 var comprobar_blur_j = false;
 var j_error_class_name="errorVNjs";
+var j_disabled_change=true;
+var j_personaliza_radio_border=true;
 
 function padverify_j_manual(width, tstring, padding) { 
   return (width <= tstring.length) ? tstring : padverify_j_manual(width, padding + tstring, padding)
@@ -1567,7 +1570,7 @@ function padverify_j_manual(width, tstring, padding) {
 				[this.form.name,this.name].join(' '),
 				exec.success ? 'Valid' : exec.response ? '"'+exec.response+'"' : 'Silent Fail'
 				);
-				if (mostraricono_j_campoobligatorio && !exec.success){
+				if (mostraricono_j_campoobligatorio && exec.element.rules.required){
 					icono_required_j($('[name="'+this.name+'"]'));
 				}
 			},
@@ -2788,11 +2791,57 @@ if (mostraricono_j_campoobligatorio){
 		});
 	});
 }
+
+// Function to watch for attribute changes
+// http://darcyclarke.me/development/detect-attribute-changes-with-jquery
+$.fn.watch = function(props, callback, timeout){
+    if(!timeout)
+        timeout = 10;
+    return this.each(function(){
+        var el         = $(this),
+            func     = function(){ __check.call(this, el) },
+            data     = {    props:     props.split(","),
+                        func:     callback,
+                        vals:     [] };
+        $.each(data.props, function(i) { data.vals[i] = el.attr(data.props[i]); });
+        el.data(data);
+        if (typeof (this.onpropertychange) == "object"){
+            el.bind("propertychange", callback);
+        } else {
+            setInterval(func, timeout);
+        }
+    });
+    function __check(el) {
+        var data     = el.data(),
+            changed = false,
+            temp    = "";
+        for(var i=0;i < data.props.length; i++) {
+            temp = el.attr(data.props[i]);
+            if(data.vals[i] != temp){
+                data.vals[i] = temp;
+                changed = true;
+                break;
+            }
+        }
+        if(changed && data.func) {
+            data.func.call(el, data);
+        }
+    }
+}
 $( document ).ready(function() {
 	if (mostraricono_j_campoobligatorio){
 		$('input[data-validate^="required"]').trigger("change");
 		$('select[data-validate^="required"]').trigger("change");
 		$('textarea[data-validate^="required"]').trigger("change");
+		if (j_disabled_change){
+			$('input[data-validate^="required"]').watch('disabled', function(){icono_required_j($(this));});
+			$('select[data-validate^="required"]').watch('disabled', function(){icono_required_j($(this));});
+			$('textarea[data-validate^="required"]').watch('disabled', function(){icono_required_j($(this));});
+		
+		}
 		comprobar_iconos_despues_valores_j();
 	}
 });
+if (j_personaliza_radio_border){
+ $( "<style>input[type='radio']:after {width: 15px;height: 15px;border-radius: 14px;top: -2px;left: -1px;position: relative;background-color: #fff;content: '';display: inline-block;visibility: visible;border: 1px solid #444;}input[type='radio']:checked:after {        width: 15px;        height: 15px;        border-radius: 14px;        top: -2px;        left: -1px;       position: relative;        background-color: #444;        content: '';        display: inline-block;        visibility: visible;        border: 1px solid #444;        font-size: 5px;   }input[type='radio'][data-validate^=\"required\"]:not([disabled]):after {        border: 1px solid red;    }input[type='radio'][data-validate^=\"required\"]:not([disabled]):checked:after {        border: 1px solid red;    }</style>" ).appendTo( "head" )
+}
