@@ -3,8 +3,10 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.1.8
+	* v 1.2.0
 	* changelog
+  - 1.2.0 correccion firefox
+	- 1.1.9 en los radio required al estar seleccionado se ve verde
 	- 1.1.8 nueva variable para personalizar los radio y diferenciar los required y variable para controlar el cambio de disabled
     - 1.1.7 bug si no es required y falla otro campo
     - 1.1.6 en evento blur de campos obligatorios ahora muestra un icono si es correcto o no, no solo si está relleno
@@ -2745,6 +2747,7 @@ function icono_required_j(obj){
 		obj.css("background-image", "");
 		obj.css("padding-left", "inherit");
 	}else{
+		if (obj.get(0).type!="radio" && obj.get(0).type!="checkbox"){
 		obj.css("background-repeat", "no-repeat");
 		obj.css("padding-left", "12px");
 		if (!obj.val()){
@@ -2758,6 +2761,7 @@ function icono_required_j(obj){
 				obj.css("background-image", icono_j_required_background_image_bad);
 			}
 		
+			}
 		}
 	}
 }
@@ -2843,5 +2847,5 @@ $( document ).ready(function() {
 	}
 });
 if (j_personaliza_radio_border){
- $( "<style>input[type='radio']:after {width: 15px;height: 15px;border-radius: 14px;top: -2px;left: -1px;position: relative;background-color: #fff;content: '';display: inline-block;visibility: visible;border: 1px solid #444;}input[type='radio']:checked:after {        width: 15px;        height: 15px;        border-radius: 14px;        top: -2px;        left: -1px;       position: relative;        background-color: #444;        content: '';        display: inline-block;        visibility: visible;        border: 1px solid #444;        font-size: 5px;   }input[type='radio'][data-validate^=\"required\"]:not([disabled]):after {        border: 1px solid red;    }input[type='radio'][data-validate^=\"required\"]:not([disabled]):checked:after {        border: 1px solid red;    }</style>" ).appendTo( "head" )
+ $( "<style>\ninput[type='radio']{\n-moz-appearance: none;\n}input[type='radio']:after {\nwidth: 15px;\nheight: 15px;\nborder-radius: 14px;\ntop: -2px;\nleft: -1px;\nposition: relative;\nbackground-color: #fff;\ncontent: '';\ndisplay: inline-block;\nvisibility: visible;\nborder: 1px solid #444;\n}input[type='radio']:checked:after {\n        width: 15px;\n        height: 15px;\n        border-radius: 14px;\n        top: -2px;\n        left: -1px;\n       position: relative;\n        background-color: #444;\n        content: '';\n        display: inline-block;\n        visibility: visible;\n        border: 1px solid #444;\n        font-size: 5px;\n   }input[type='radio'][data-validate^=\"required\"]:not([disabled]):after {\n        border: 1px solid red;\n    }input[type='radio'][data-validate^=\"required\"]:not([disabled]):checked:after {\n background-color:lightgreen;\n       border: 1px solid red;\n    }</style>" ).appendTo( "head" )
 }
