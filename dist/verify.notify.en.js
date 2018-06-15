@@ -2729,6 +2729,12 @@ function padverify_j_manual(width, tstring, padding) {
 var icono_j_required_background_image="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAALCAYAAABGbhwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAABOElEQVQoU2NggIJtEiqieyWU5+8VVzq7R0xRHCR8WE5OcD8DAwtMDZjeKS7ODVT4AYj/AxU7bReXV9gnoXRlj7hy3zYVFXaGvVLq6vtFVQ32y8tz7JFQ3gtSuEdCcR5QwWkwW1zp1X5xJR2GPRJKc4ECX4D0+b0SSsfBJkoo/QJq+gdU/H6PuIov2Eqwm8SVfkEUIDBIDKg5YxUDAzNY4RUtLbZdYkrOQN0LgAr/oGl4CTR57n5xZQew4v8MDIxA62qAiv6imwx152+wQqAV6UCdv0EKgVY+hkgqnwI6qxQodwJoyCaGI8LqvEDJ2yDHAyUW75dQCQGbLK78cIeMltAxGRnObUIqfFAPKWsDda7cANS0Q1JNA2jCRyD/0y4xRV2UwAZxYL7bL6rFA7RhKjBYkkExA1MIAFUij9ylqi79AAAAAElFTkSuQmCC')";
 var icono_j_required_background_image_ok="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAAo0lEQVQoU2NgoBSErgplDr9qZBtxycgbp1kgRaFX9AtDLustiLpkI4hVYf3/eqaQK3pFIVd0zoZeMZZDURR+xSgq6qaJEsN/BsbQqwZ5wZd1XoZdNjDFMCnkqn5p8BXd6yFXdcuCLmu/C7ms2wGyHkOhzxljLqApqwMv6/wNuaJ7IeaCHjdOD4RfNlIGmnQ97KqhHcEQi71iLZd2xpiVoEJ8CgDBnjjx4g+zOAAAAABJRU5ErkJggg==')";
 var icono_j_required_background_image_bad="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAA1UlEQVQoU5WQTQ6CMBCFq6tCEW7hGgoVExf+EjWew2u58A6GjXdw5R3ERAwbNZa2ThtswpImk0xmvnlvpgh1eTXz9jV1LjwlM4VQXwdPgpWInbNM/cxqAXRVEVYiwjcek4wn7laEuDQ1inMLcuavZYTvEAqAFwxUJo9wwUfB3ILGiro7aHxkiFUDVZy5G+j12iDYAVBpu2aNh2Rk2QJ57Gd6p78SKD+bvJRjb2IVRUzyRqXQdhICBo06HHew4DfxpoI6pzcsrq10wBELqB0lGwy7fDX6AT4wcnsZom2IAAAAAElFTkSuQmCC')";
+
+/*porque includes() solo es a partir de IE12*/
+String.prototype.jdoesIncludeVN=function(needle){
+    return this.indexOf(needle) != -1;
+}
+
 function icono_required_j(obj){
 	if (obj.prop('disabled')){
 		obj.css("background-image", "");
@@ -2742,7 +2748,7 @@ function icono_required_j(obj){
 				obj.css("background-image", icono_j_required_background_image);
 			}else{
 				
-			if (!obj[0].className.includes(j_error_class_name)){
+			if (!obj[0].className.jdoesIncludeVN(j_error_class_name)){
 					obj.css("background-image", icono_j_required_background_image_ok);
 				}else{
 					obj.css("background-image", icono_j_required_background_image_bad);
