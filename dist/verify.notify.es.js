@@ -3,9 +3,10 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.0
+	* v 1.2.1
 	* changelog
-  - 1.2.0 correccion firefox
+	- 1.2.1 tiene que mirar que contiene la clase, no que se la clase para mostrar el icono de error
+	- 1.2.0 correccion firefox
 	- 1.1.9 en los radio required al estar seleccionado se ve verde
 	- 1.1.8 nueva variable para personalizar los radio y diferenciar los required y variable para controlar el cambio de disabled
     - 1.1.7 bug si no es required y falla otro campo
@@ -2755,7 +2756,7 @@ function icono_required_j(obj){
 			obj.css("background-image", icono_j_required_background_image);
 		}else{
 			
-			if (obj[0].className!=j_error_class_name){
+			if (!obj[0].className.includes(j_error_class_name)){
 				obj.css("background-image", icono_j_required_background_image_ok);
 			}else{
 				obj.css("background-image", icono_j_required_background_image_bad);
