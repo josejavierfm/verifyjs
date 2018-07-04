@@ -3,10 +3,11 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.1
+	* v 1.2.2
 	* changelog
+	- 1.2.2 bug en maxEqualDateField
 	- 1.2.1 tiene que mirar que contiene la clase, no que se la clase para mostrar el icono de error
-  - 1.2.0 correccion firefox
+  	- 1.2.0 correccion firefox
 	- 1.1.9 en los radio required al estar seleccionado se ve verde
 	- 1.1.8 nueva variable para personalizar los radio y diferenciar los required y variable para controlar el cambio de disabled
     - 1.1.7 bug si no es required y falla otro campo
@@ -2588,7 +2589,7 @@ function padverify_j_manual(width, tstring, padding) {
 			   if(!current)
 				return "Invalid date";
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current <= firstDate)
 					return "Date must come after to field "+n;
 			  }
@@ -2601,7 +2602,7 @@ function padverify_j_manual(width, tstring, padding) {
 			   if(!current)
 				return "Invalid date";
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current < firstDate)
 					return "Date must come after or equal to field "+n;
 			  }
@@ -2614,7 +2615,7 @@ function padverify_j_manual(width, tstring, padding) {
 			   if(!current)
 				return "Invalid date";
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current >= firstDate)
 					return "Date must come before to field "+n;
 			  }
@@ -2627,7 +2628,7 @@ function padverify_j_manual(width, tstring, padding) {
 			   if(!current)
 				return "Invalid date";
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current > firstDate)
 					return "Date must come before or equal to field "+n;
 			  }

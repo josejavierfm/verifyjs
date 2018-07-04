@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.1
+	* v 1.2.2
 	* changelog
+	- 1.2.2 bug en maxEqualDateField
 	- 1.2.1 tiene que mirar que contiene la clase, no que se la clase para mostrar el icono de error
 	- 1.2.0 correccion firefox
 	- 1.1.9 en los radio required al estar seleccionado se ve verde
@@ -2596,7 +2597,7 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current <= firstDate)
 					return "La fecha tiene que ser mayor al campo "+n;
 			  }
@@ -2611,7 +2612,7 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current < firstDate)
 					return "La fecha tiene que ser mayor o igual al campo "+n;
 			  }
@@ -2626,7 +2627,7 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  if(firstDate!="" && firstDate!=null){
 				 if(current >= firstDate)
 					return "La fecha tiene que ser menor al campo "+n;
 			  }
@@ -2641,7 +2642,8 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  if(firstDate!=""){
+			  console.log(firstDate);
+			  if(firstDate!="" && firstDate!=null){
 				 if(current > firstDate)
 					return "La fecha tiene que ser menor o igual al campo "+n;
 			  }
