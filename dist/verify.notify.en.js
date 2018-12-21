@@ -3,11 +3,12 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.2
+	* v 1.2.3
 	* changelog
+	- 1.2.3 poder poner borde de color en lugar de las imagenes
 	- 1.2.2 bug en maxEqualDateField
 	- 1.2.1 tiene que mirar que contiene la clase, no que se la clase para mostrar el icono de error
-  	- 1.2.0 correccion firefox
+	- 1.2.0 correccion firefox
 	- 1.1.9 en los radio required al estar seleccionado se ve verde
 	- 1.1.8 nueva variable para personalizar los radio y diferenciar los required y variable para controlar el cambio de disabled
     - 1.1.7 bug si no es required y falla otro campo
@@ -2730,7 +2731,10 @@ function padverify_j_manual(width, tstring, padding) {
 var icono_j_required_background_image="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAALCAYAAABGbhwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAABOElEQVQoU2NggIJtEiqieyWU5+8VVzq7R0xRHCR8WE5OcD8DAwtMDZjeKS7ODVT4AYj/AxU7bReXV9gnoXRlj7hy3zYVFXaGvVLq6vtFVQ32y8tz7JFQ3gtSuEdCcR5QwWkwW1zp1X5xJR2GPRJKc4ECX4D0+b0SSsfBJkoo/QJq+gdU/H6PuIov2Eqwm8SVfkEUIDBIDKg5YxUDAzNY4RUtLbZdYkrOQN0LgAr/oGl4CTR57n5xZQew4v8MDIxA62qAiv6imwx152+wQqAV6UCdv0EKgVY+hkgqnwI6qxQodwJoyCaGI8LqvEDJ2yDHAyUW75dQCQGbLK78cIeMltAxGRnObUIqfFAPKWsDda7cANS0Q1JNA2jCRyD/0y4xRV2UwAZxYL7bL6rFA7RhKjBYkkExA1MIAFUij9ylqi79AAAAAElFTkSuQmCC')";
 var icono_j_required_background_image_ok="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAAo0lEQVQoU2NgoBSErgplDr9qZBtxycgbp1kgRaFX9AtDLustiLpkI4hVYf3/eqaQK3pFIVd0zoZeMZZDURR+xSgq6qaJEsN/BsbQqwZ5wZd1XoZdNjDFMCnkqn5p8BXd6yFXdcuCLmu/C7ms2wGyHkOhzxljLqApqwMv6/wNuaJ7IeaCHjdOD4RfNlIGmnQ97KqhHcEQi71iLZd2xpiVoEJ8CgDBnjjx4g+zOAAAAABJRU5ErkJggg==')";
 var icono_j_required_background_image_bad="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAA1UlEQVQoU5WQTQ6CMBCFq6tCEW7hGgoVExf+EjWew2u58A6GjXdw5R3ERAwbNZa2ThtswpImk0xmvnlvpgh1eTXz9jV1LjwlM4VQXwdPgpWInbNM/cxqAXRVEVYiwjcek4wn7laEuDQ1inMLcuavZYTvEAqAFwxUJo9wwUfB3ILGiro7aHxkiFUDVZy5G+j12iDYAVBpu2aNh2Rk2QJ57Gd6p78SKD+bvJRjb2IVRUzyRqXQdhICBo06HHew4DfxpoI6pzcsrq10wBELqB0lGwy7fDX6AT4wcnsZom2IAAAAAElFTkSuQmCC')";
-
+var j_bordecolor_input=false;
+var color_j_borde_required="#ffa500";
+var color_j_borde_required_ok="#19d85a";
+var color_j_borde_required_bad="#d83a19";
 /*porque includes() solo es a partir de IE12*/
 String.prototype.jdoesIncludeVN=function(needle){
     return this.indexOf(needle) != -1;
@@ -2743,16 +2747,34 @@ function icono_required_j(obj){
 	}else{
 		if (obj.get(0).type!="radio" && obj.get(0).type!="checkbox"){
 			obj.css("background-repeat", "no-repeat");
-			obj.css("padding-left", "12px");
+			if (!j_bordecolor_input){
+				obj.css("padding-left", "12px");
+			}
 			if (!obj.val()){
 				//requerido
-				obj.css("background-image", icono_j_required_background_image);
+				if (j_bordecolor_input){
+					
+					obj.css("background-image", "none");
+					obj.css("border", "1px solid "+color_j_borde_required+ " !important");
+				}else{
+					obj.css("background-image", icono_j_required_background_image);
+				}
 			}else{
 				
-			if (!obj[0].className.jdoesIncludeVN(j_error_class_name)){
-					obj.css("background-image", icono_j_required_background_image_ok);
+				if (!obj[0].className.jdoesIncludeVN(j_error_class_name)){
+					if (j_bordecolor_input){
+						obj.css("background-image", "none");
+						obj.css("border", "1px solid "+color_j_borde_required_ok + " !important");
+					}else{
+						obj.css("background-image", icono_j_required_background_image_ok);
+					}
 				}else{
-					obj.css("background-image", icono_j_required_background_image_bad);
+					if (j_bordecolor_input){
+						obj.css("background-image", "none");
+						obj.css("border", "1px solid "+color_j_borde_required_bad + " !important");
+					}else{
+						obj.css("background-image", icono_j_required_background_image_bad);
+					}
 				}
 			
 			}
