@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.3
+	* v 1.2.4
 	* changelog
+	- 1.2.4 que el borde de color sea solo inferior
 	- 1.2.3 poder poner borde de color en lugar de las imagenes
 	- 1.2.2 bug en maxEqualDateField
 	- 1.2.1 tiene que mirar que contiene la clase, no que se la clase para mostrar el icono de error
@@ -2748,6 +2749,7 @@ var icono_j_required_background_image="url('data:image/png;base64,iVBORw0KGgoAAA
 var icono_j_required_background_image_ok="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAAo0lEQVQoU2NgoBSErgplDr9qZBtxycgbp1kgRaFX9AtDLustiLpkI4hVYf3/eqaQK3pFIVd0zoZeMZZDURR+xSgq6qaJEsN/BsbQqwZ5wZd1XoZdNjDFMCnkqn5p8BXd6yFXdcuCLmu/C7ms2wGyHkOhzxljLqApqwMv6/wNuaJ7IeaCHjdOD4RfNlIGmnQ97KqhHcEQi71iLZd2xpiVoEJ8CgDBnjjx4g+zOAAAAABJRU5ErkJggg==')";
 var icono_j_required_background_image_bad="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAA1UlEQVQoU5WQTQ6CMBCFq6tCEW7hGgoVExf+EjWew2u58A6GjXdw5R3ERAwbNZa2ThtswpImk0xmvnlvpgh1eTXz9jV1LjwlM4VQXwdPgpWInbNM/cxqAXRVEVYiwjcek4wn7laEuDQ1inMLcuavZYTvEAqAFwxUJo9wwUfB3ILGiro7aHxkiFUDVZy5G+j12iDYAVBpu2aNh2Rk2QJ57Gd6p78SKD+bvJRjb2IVRUzyRqXQdhICBo06HHew4DfxpoI6pzcsrq10wBELqB0lGwy7fDX6AT4wcnsZom2IAAAAAElFTkSuQmCC')";
 var j_bordecolor_input=false;
+var j_bordecolor_input_onlybottom=true;
 var color_j_borde_required="#ffa500";
 var color_j_borde_required_ok="#19d85a";
 var color_j_borde_required_bad="#d83a19";
@@ -2771,7 +2773,11 @@ function icono_required_j(obj){
 				if (j_bordecolor_input){
 					
 					obj.css("background-image", "none");
-					obj.css("border", "1px solid "+color_j_borde_required+ " !important");
+					if (j_bordecolor_input_onlybottom){
+						obj.css("border-bottom", "2px solid "+color_j_borde_required);
+					}else{
+						obj.css("border", "1px solid "+color_j_borde_required);
+					}
 				}else{
 					obj.css("background-image", icono_j_required_background_image);
 				}
@@ -2780,14 +2786,22 @@ function icono_required_j(obj){
 				if (!obj[0].className.jdoesIncludeVN(j_error_class_name)){
 					if (j_bordecolor_input){
 						obj.css("background-image", "none");
-						obj.css("border", "1px solid "+color_j_borde_required_ok + " !important");
+						if (j_bordecolor_input_onlybottom){
+							obj.css("border-bottom", "2px solid "+color_j_borde_required_ok);
+						}else{
+							obj.css("border", "1px solid "+color_j_borde_required_ok);
+						}
 					}else{
 						obj.css("background-image", icono_j_required_background_image_ok);
 					}
 				}else{
 					if (j_bordecolor_input){
 						obj.css("background-image", "none");
-						obj.css("border", "1px solid "+color_j_borde_required_bad + " !important");
+						if (j_bordecolor_input_onlybottom){
+							obj.css("border-bottom", "2px solid "+color_j_borde_required_bad);
+						}else{
+							obj.css("border", "1px solid "+color_j_borde_required_bad);
+						}
 					}else{
 						obj.css("background-image", icono_j_required_background_image_bad);
 					}
