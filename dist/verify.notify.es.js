@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2018
 	* textos español
-	* v 1.2.4
+	* v 1.2.5
 	* changelog
+  - 1.2.5 funcion para hacer que un campo sea requerido
 	- 1.2.4 que el borde de color sea solo inferior
 	- 1.2.3 poder poner borde de color en lugar de las imagenes
 	- 1.2.2 bug en maxEqualDateField
@@ -2645,7 +2646,7 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Fecha invalida";
 
 			  var firstDate = $.verify.utils.parseDate(c.val());
-			  console.log(firstDate);
+			 
 			  if(firstDate!="" && firstDate!=null){
 				 if(current > firstDate)
 					return "La fecha tiene que ser menor o igual al campo "+n;
@@ -2895,3 +2896,31 @@ $( document ).ready(function() {
 if (j_personaliza_radio_border){
  $( "<style>\ninput[type='radio']{\n-moz-appearance: none;\n}input[type='radio']:after {\nwidth: 15px;\nheight: 15px;\nborder-radius: 14px;\ntop: -2px;\nleft: -1px;\nposition: relative;\nbackground-color: #fff;\ncontent: '';\ndisplay: inline-block;\nvisibility: visible;\nborder: 1px solid #444;\n}input[type='radio']:checked:after {\n        width: 15px;\n        height: 15px;\n        border-radius: 14px;\n        top: -2px;\n        left: -1px;\n       position: relative;\n        background-color: #444;\n        content: '';\n        display: inline-block;\n        visibility: visible;\n        border: 1px solid #444;\n        font-size: 5px;\n   }input[type='radio'][data-validate^=\"required\"]:not([disabled]):after {\n        border: 1px solid red;\n    }input[type='radio'][data-validate^=\"required\"]:not([disabled]):checked:after {\n background-color:lightgreen;\n       border: 1px solid red;\n    }</style>" ).appendTo( "head" )
 }
+
+(function($) {
+  'use strict';
+ $.fn.jMakeRequired = function() {
+
+    return this.each(function(i, element) {
+			   
+        var $me = $(this);
+			var dv=$me.attr('data-validate');
+			if (dv==undefined){
+				$me.attr("data-validate", "required");
+			}else{
+				//miramos si tiene required ya....
+				if (dv.indexOf("required")==-1){
+					if(dv!=""){
+						$me.attr("data-validate", "required,"+dv);
+					}else{
+						$me.attr("data-validate", "required");
+					}
+				}
+			}
+			
+     
+    });
+  };
+  
+  
+}(jQuery));
