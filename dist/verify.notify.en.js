@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2019
 	* textos español
-	* v 1.2.6
+	* v 1.2.7
 	* changelog
+	- 1.2.7 tipo de campo texto seo (numeros,letras y guiones)
   - 1.2.6  permite especificar que un mensaje será muy largo para que no use solo una linea, se aplica en el div que contiene el elemento, añadir la clase jmensajevariaslineas
   - 1.2.5 funcion para hacer que un campo sea requerido
 	- 1.2.4 que el borde de color sea solo inferior
@@ -2356,6 +2357,10 @@ function padverify_j_manual(width, tstring, padding) {
 			alphanumeric: {
 				regex: /^[0-9A-Za-z]+$/,
 				message: "Use digits and letters only"
+			},
+			seo: {
+				regex: /^[0-9A-Za-z\-]+$/,
+				message: "Use digits, letters and slash only"
 			},
 			sinsimbolos: {
 				regex: /^[0-9A-Za-z\n ]+$/,
