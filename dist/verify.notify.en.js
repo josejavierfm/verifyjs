@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2019
 	* textos español
-	* v 1.2.7
+	* v 1.2.8
 	* changelog
+	- 1.2.8 la funcion de callback pasa el id del campo o formulario en la validacion manual
 	- 1.2.7 tipo de campo texto seo (numeros,letras y guiones)
   - 1.2.6  permite especificar que un mensaje será muy largo para que no use solo una linea, se aplica en el div que contiene el elemento, añadir la clase jmensajevariaslineas
   - 1.2.5 funcion para hacer que un campo sea requerido
@@ -1520,11 +1521,17 @@ function padverify_j_manual(width, tstring, padding) {
 			validate: function(callback,showValField) {//console.log(444);console.log(showValField);
 				if(!callback) callback = $.noop;
 				var exec = new FieldExecution(this);
+				var nombre=this.name;//console.log('++++'+this);
+				var obj=this;
+				//console.log("a1");
+				//console.log(obj);
+				//console.log($(obj));
+				//console.log("a2");
 				exec.showpop=showValField;
 				exec.execute().done(function() {
-					callback(true);
+					callback(true,nombre);
 					}).fail(function() {
-					callback(false);
+					callback(false,nombre);
 				});
 				return;
 			},
@@ -1751,13 +1758,13 @@ function padverify_j_manual(width, tstring, padding) {
 				if(!callback) callback = $.noop;
 				
 				this.updateFields();
-				
+				var nombre=this.name;//console.log('++++'+this);
 				var exec = new FormExecution(this);
 				exec.showpop=showValidate;
 				exec.execute().done(function() {
-					callback(true);
+					callback(true,nombre);
 					}).fail(function() {
-					callback(false);
+					callback(false,nombre);
 				});
 				return;
 			}
@@ -2752,8 +2759,8 @@ function icono_required_j(obj){
 	if (obj.prop('disabled')){
 		obj.css("background-image", "");
 		obj.css("padding-left", "inherit");
-	}else{
-		if (obj.get(0).type!="radio" && obj.get(0).type!="checkbox"){
+	}else{//console.log(obj);console.log(obj.get(0));
+		if (obj!=null && obj.get(0)!=null && obj.get(0).type!="radio" && obj.get(0).type!="checkbox"){
 			obj.css("background-repeat", "no-repeat");
 			if (!j_bordecolor_input){
 				obj.css("padding-left", "12px");
