@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2019
 	* textos español
-	* v 1.2.8
+	* v 1.2.9
 	* changelog
+	- 1.2.9 iban
 	- 1.2.8 la funcion de callback pasa el id del campo o formulario en la validacion manual
 	- 1.2.7 tipo de campo texto seo (numeros,letras y guiones)
   - 1.2.6  permite especificar que un mensaje será muy largo para que no use solo una linea, se aplica en el div que contiene el elemento, añadir la clase jmensajevariaslineas
@@ -37,10 +38,74 @@
 */
 var mostraricono_j_campoobligatorio=true;
 var gotoerror_focus_j_manual=false;
-var comprobar_blur_j = true;
+var comprobar_blur_j = false;
 var j_error_class_name="errorVNjs";
 var j_disabled_change=true;
 var j_personaliza_radio_border=true;
+
+
+
+function verify_j_getCodigoControl_IBAN(codigoPais,cc)
+{
+	// cada letra de pais tiene un valor
+	valoresPaises = {
+		'A':'10',
+		'B':'11',
+		'C':'12',
+		'D':'13',
+		'E':'14',
+		'F':'15',
+		'G':'16',
+		'H':'17',
+		'I':'18',
+		'J':'19',
+		'K':'20',
+		'L':'21',
+		'M':'22',
+		'N':'23',
+		'O':'24',
+		'P':'25',
+		'Q':'26',
+		'R':'27',
+		'S':'28',
+		'T':'29',
+		'U':'30',
+		'V':'31',
+		'W':'32',
+		'X':'33',
+		'Y':'34',
+		'Z':'35'
+	};
+ 
+	// reemplazamos cada letra por su valor numerico y ponemos los valores mas dos ceros al final de la cuenta
+	var dividendo = cc+valoresPaises[codigoPais.substr(0,1)]+valoresPaises[codigoPais.substr(1,1)]+'00';
+ 
+	// Calculamos el modulo 97 sobre el valor numerico y lo restamos al valor 98
+	var digitoControl = 98-verify_j_modulo(dividendo, 97);
+ 
+	// Si el digito de control es un solo numero, añadimos un cero al delante
+	if(digitoControl.length==1)
+	{
+		digitoControl='0'+digitoControl;
+	}
+	return digitoControl;
+}
+ 
+/**
+ * Funcion para calcular el modulo
+ * @param string valor
+ * @param integer divisor
+ * @return integer
+ */
+function verify_j_modulo(valor, divisor) {
+	var resto=0;
+	var dividendo=0;
+	for (var i=0;i<valor.length;i+=10) {
+		dividendo = resto + "" + valor.substr(i, 10);
+		resto = dividendo % divisor;
+	}
+	return resto;
+}
 
 
 function padverify_j_manual(width, tstring, padding) { 
@@ -2401,6 +2466,19 @@ function padverify_j_manual(width, tstring, padding) {
 					return r.message;
 				},
 				message: "Fecha invalida"
+			},
+			iban: {
+				fn: function(r) {
+					datoiban=r.val();
+					if(datoiban.length==24)
+					{
+						var digitoControl=verify_j_getCodigoControl_IBAN(datoiban.substr(0,2).toUpperCase(), datoiban.substr(4));
+						if(digitoControl==datoiban.substr(2,2))
+							return true;
+					}
+					return r.message;
+				},
+				message: "El IBAN no es valido, 24 caracteres sin espacios"
 			},
 			required: {
 				
