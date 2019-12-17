@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2019
 	* textos español
-	* v 1.2.9
+	* v 1.3.0
 	* changelog
+	- 1.3.0 poder deshabilitar todos los required con una variable
 	- 1.2.9 iban
 	- 1.2.8 la funcion de callback pasa el id del campo o formulario en la validacion manual
 	- 1.2.7 tipo de campo texto seo (numeros,letras y guiones)
@@ -42,6 +43,7 @@ var comprobar_blur_j = false;
 var j_error_class_name="errorVNjs";
 var j_disabled_change=true;
 var j_personaliza_radio_border=true;
+var j_skip_required=false;
 
 
 
@@ -1750,9 +1752,9 @@ function padverify_j_manual(width, tstring, padding) {
 				var fieldSelector = "input:not([type=hidden]),select,textarea",
 				field, fieldElem;
 				
-				if(!domElem.is(fieldSelector))
-				return this.warn("Validators will not work on container elements ("+domElem.prop('tagName')+"). Please use INPUT, SELECT or TEXTAREA.");
-				
+				if(!domElem.is(fieldSelector)){
+					return this.warn("Validators will not work on container elements ("+domElem.prop('tagName')+"). [name="+domElem.prop('name')+"] Please use INPUT (no hidden), SELECT or TEXTAREA.");
+				}
 				fieldElem = domElem;
 				
 				field = this.fields.find(fieldElem);
@@ -2488,30 +2490,31 @@ function padverify_j_manual(width, tstring, padding) {
 				
 				requiredField: function(r, field) {
 					var v = field.val();
-					
-					switch (field.prop("type")) {
-						case "radio":
-						case "checkbox":
-						var name = field.attr("name");
-						var group = field.data('fieldGroup');
-						
-						if(!group) {
-							group = r.form.find("input[name='" + name + "']");
-							field.data('fieldGroup', group);
+					if (!j_skip_required){
+						switch (field.prop("type")) {
+							case "radio":
+							case "checkbox":
+							var name = field.attr("name");
+							var group = field.data('fieldGroup');
+							
+							if(!group) {
+								group = r.form.find("input[name='" + name + "']");
+								field.data('fieldGroup', group);
+							}
+							
+							if (group.is(":checked"))
+							break;
+							
+							if (group.length === 1)
+							return r.messages.single;
+							
+							return r.messages.multiple;
+							
+							default:
+							if (! $.trim(v))
+							return r.messages.all;
+							break;
 						}
-						
-						if (group.is(":checked"))
-						break;
-						
-						if (group.length === 1)
-						return r.messages.single;
-						
-						return r.messages.multiple;
-						
-						default:
-						if (! $.trim(v))
-						return r.messages.all;
-						break;
 					}
 					return true;
 				},
@@ -2840,11 +2843,11 @@ function padverify_j_manual(width, tstring, padding) {
 var icono_j_required_background_image="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAALCAYAAABGbhwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAABOElEQVQoU2NggIJtEiqieyWU5+8VVzq7R0xRHCR8WE5OcD8DAwtMDZjeKS7ODVT4AYj/AxU7bReXV9gnoXRlj7hy3zYVFXaGvVLq6vtFVQ32y8tz7JFQ3gtSuEdCcR5QwWkwW1zp1X5xJR2GPRJKc4ECX4D0+b0SSsfBJkoo/QJq+gdU/H6PuIov2Eqwm8SVfkEUIDBIDKg5YxUDAzNY4RUtLbZdYkrOQN0LgAr/oGl4CTR57n5xZQew4v8MDIxA62qAiv6imwx152+wQqAV6UCdv0EKgVY+hkgqnwI6qxQodwJoyCaGI8LqvEDJ2yDHAyUW75dQCQGbLK78cIeMltAxGRnObUIqfFAPKWsDda7cANS0Q1JNA2jCRyD/0y4xRV2UwAZxYL7bL6rFA7RhKjBYkkExA1MIAFUij9ylqi79AAAAAElFTkSuQmCC')";
 var icono_j_required_background_image_ok="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAAo0lEQVQoU2NgoBSErgplDr9qZBtxycgbp1kgRaFX9AtDLustiLpkI4hVYf3/eqaQK3pFIVd0zoZeMZZDURR+xSgq6qaJEsN/BsbQqwZ5wZd1XoZdNjDFMCnkqn5p8BXd6yFXdcuCLmu/C7ms2wGyHkOhzxljLqApqwMv6/wNuaJ7IeaCHjdOD4RfNlIGmnQ97KqhHcEQi71iLZd2xpiVoEJ8CgDBnjjx4g+zOAAAAABJRU5ErkJggg==')";
 var icono_j_required_background_image_bad="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAA1UlEQVQoU5WQTQ6CMBCFq6tCEW7hGgoVExf+EjWew2u58A6GjXdw5R3ERAwbNZa2ThtswpImk0xmvnlvpgh1eTXz9jV1LjwlM4VQXwdPgpWInbNM/cxqAXRVEVYiwjcek4wn7laEuDQ1inMLcuavZYTvEAqAFwxUJo9wwUfB3ILGiro7aHxkiFUDVZy5G+j12iDYAVBpu2aNh2Rk2QJ57Gd6p78SKD+bvJRjb2IVRUzyRqXQdhICBo06HHew4DfxpoI6pzcsrq10wBELqB0lGwy7fDX6AT4wcnsZom2IAAAAAElFTkSuQmCC')";
-var j_bordecolor_input=false;
+var j_bordecolor_input=true;
 var j_bordecolor_input_onlybottom=true;
-var color_j_borde_required="#ffa500";
-var color_j_borde_required_ok="#19d85a";
-var color_j_borde_required_bad="#d83a19";
+var color_j_borde_required="#f68d2e";
+var color_j_borde_required_ok="#00bf6f";
+var color_j_borde_required_bad="#ff585d";
 /*porque includes() solo es a partir de IE12*/
 String.prototype.jdoesIncludeVN=function(needle){
     return this.indexOf(needle) != -1;
