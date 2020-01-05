@@ -1,10 +1,11 @@
 /** Verify.js - v0.0.1 - 2013/06/12
 	* https://github.com/jpillora/verify
 	* Copyright (c) 2013 Jaime Pillora - MIT
-	* Modificado por José Javier Fdez 2019
+	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.0
+	* v 1.3.1
 	* changelog
+	- 1.3.1 nuevo tipo, incluye por lo menos un numero
 	- 1.3.0 poder deshabilitar todos los required con una variable
 	- 1.2.9 iban
 	- 1.2.8 la funcion de callback pasa el id del campo o formulario en la validacion manual
@@ -2441,6 +2442,10 @@ function padverify_j_manual(width, tstring, padding) {
 				regex: /^[0-9A-Za-z\n ]+$/,
 				message: "Use digits and letters only, avoid other symbols"
 			},
+			porlomenosnumero: {
+				regex: /^(.*)[0-9]+(.*)$/,
+				message: "Use at least one number"
+			},
 			texto: {
 				regex: /^[0-9A-Za-z ]+$/,
 				message: "Use digits and letters only, avoid other symbols and line break"
@@ -2982,7 +2987,7 @@ if (j_personaliza_radio_border){
   'use strict';
  $.fn.jMakeRequired = function() {
 
-    return this.each(function(i, element) {
+	this.each(function(i, element) {
 			   
         var $me = $(this);
 			var dv=$me.attr('data-validate');
@@ -3000,7 +3005,9 @@ if (j_personaliza_radio_border){
 			}
 			
      
-    });
+	});
+	comprobar_iconos_despues_valores_j();
+	return true;
   };
   
   
