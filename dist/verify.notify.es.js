@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.1
+	* v 1.3.2
 	* changelog
+	- 1.3.2 emails , varios separados por coma
 	- 1.3.1 nuevo tipo, incluye por lo menos un numero
 	- 1.3.0 poder deshabilitar todos los required con una variable
 	- 1.2.9 iban
@@ -2425,6 +2426,10 @@ function padverify_j_manual(width, tstring, padding) {
 			email: {
 				regex: /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 				message: "Email invalido"
+			},
+			emails: {
+				regex: /(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s]+@[^\s,]+\.[^\s,]+)$/,
+				message: "Emails invalidos, separa con ,"
 			},
 			url: {
 				regex: /^https?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/,

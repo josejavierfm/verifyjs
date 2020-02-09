@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.1
+	* v 1.3.2
 	* changelog
+	- 1.3.2 emails , varios separados por coma
 	- 1.3.1 nuevo tipo, incluye por lo menos un numero
 	- 1.3.0 poder deshabilitar todos los required con una variable
 	- 1.2.9 iban
@@ -2426,6 +2427,10 @@ function padverify_j_manual(width, tstring, padding) {
 				regex: /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 				message: "Invalid email address"
 			},
+			emails: {
+				regex: /(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s]+@[^\s,]+\.[^\s,]+)$/,
+				message: "Emails invalidos, separate with ,"
+			},
 			url: {
 				regex: /^https?:\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/,
 				message: "Invalid URL"
@@ -2834,9 +2839,9 @@ var icono_j_required_background_image_ok="url('data:image/png;base64,iVBORw0KGgo
 var icono_j_required_background_image_bad="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAAA1UlEQVQoU5WQTQ6CMBCFq6tCEW7hGgoVExf+EjWew2u58A6GjXdw5R3ERAwbNZa2ThtswpImk0xmvnlvpgh1eTXz9jV1LjwlM4VQXwdPgpWInbNM/cxqAXRVEVYiwjcek4wn7laEuDQ1inMLcuavZYTvEAqAFwxUJo9wwUfB3ILGiro7aHxkiFUDVZy5G+j12iDYAVBpu2aNh2Rk2QJ57Gd6p78SKD+bvJRjb2IVRUzyRqXQdhICBo06HHew4DfxpoI6pzcsrq10wBELqB0lGwy7fDX6AT4wcnsZom2IAAAAAElFTkSuQmCC')";
 var j_bordecolor_input=true;
 var j_bordecolor_input_onlybottom=true;
-var color_j_borde_required="#ffa500";
-var color_j_borde_required_ok="#19d85a";
-var color_j_borde_required_bad="#d83a19";
+var color_j_borde_required="#f68d2e";
+var color_j_borde_required_ok="#00bf6f";
+var color_j_borde_required_bad="#ff585d";
 /*porque includes() solo es a partir de IE12*/
 String.prototype.jdoesIncludeVN=function(needle){
     return this.indexOf(needle) != -1;
