@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.2
+	* v 1.3.3
 	* changelog
+	- 1.3.3 maxEqualVal y minEqualVal,  poder indicar si tiene que tener entre dos valores, el del campo y otro (por id) this__or__field y ademas cualquier regla que contenga __ se evalua siempre aunque no tenga texto
 	- 1.3.2 emails , varios separados por coma
 	- 1.3.1 nuevo tipo, incluye por lo menos un numero
 	- 1.3.0 poder deshabilitar todos los required con una variable
@@ -2088,15 +2089,19 @@ function padverify_j_manual(width, tstring, padding) {
 				
 				//skip check
 				this.skip = this.skipValidations(ruleParams);
-				if(this.skip)
-				return this.resolve();
+				if(this.skip){//console.log(ruleParams);
+					return this.resolve();
+				}else{
+					//console.log('no skip');
+				}
 				
 				//ready
 				this.children = $.map(ruleParams, $.proxy(function(r) {
-					if(r.rule.type === 'group')
-					return new GroupRuleExecution(r, this);
-					else
-					return new RuleExecution(r, this);
+					if(r.rule.type === 'group'){
+						return new GroupRuleExecution(r, this);
+					}else{
+						return new RuleExecution(r, this);
+					}
 				}, this));
 				
 				// this.log("exec rules #%s", this.children.length);
@@ -2113,8 +2118,22 @@ function padverify_j_manual(width, tstring, padding) {
 				
 				//not required
 				if(!ruleParams.required && !$.trim(this.domElem.val())) {
-					//this.warn("skip (not required)");
-					return true;
+					buscarforzar=false;
+					for (var i = 0; i < ruleParams.length; i ++){
+						var nn=ruleParams[i].name;
+						var buscardoble=nn.indexOf("__");
+						if(buscardoble!==-1){
+							//si tiene doble guion bajo,se tiene que evaluar siempre, no la puede saltar
+							buscarforzar =true;
+						}
+					}
+					
+					if (buscarforzar){
+						return false;
+					}else{
+						this.warn("skip (not required)");
+						return true;
+					}
 				}
 				
 				//custom-form-elements.js hidden fields
@@ -2641,6 +2660,24 @@ function padverify_j_manual(width, tstring, padding) {
 				return "Debe ser menor que " + max + suffix;
 				return true;
 			},
+			minEqualVal: function(r) {
+				var v = parseFloat(r.val().replace(/[^\d\.]/g,'')),
+				suffix = r.args[1] || '',
+				min = parseFloat(r.args[0]);
+				if(!(v >= min)){
+					return "Debe ser mayor o igual que " + min + suffix;
+				}
+				return true;
+			},
+			maxEqualVal: function(r) {
+				var v = parseFloat(r.val().replace(/[^\d\.]/g,'')),
+				suffix = r.args[1] || '',
+				max = parseFloat(r.args[0]);
+				if(!(v <= max)){
+					return "Debe ser menor o igual que " + max + suffix;
+				}
+				return true;
+			},
 			 maxDate: function(r) {
 			   var current = $.verify.utils.parseDate(r.val());
 			  if(!current)
@@ -2777,7 +2814,7 @@ function padverify_j_manual(width, tstring, padding) {
 			minAge: function(r){
 				var age = parseInt(r.args[0],10);
 				if(!age || isNaN(age)) {
-					console.log("WARNING: Invalid Age Param: " + age);
+					//console.log("WARNING: Invalid Age Param: " + age);
 					return true;
 				}
 				var currDate = new Date();
@@ -2790,7 +2827,15 @@ function padverify_j_manual(width, tstring, padding) {
 				if(fieldDate > minDate)
 				return "Tienes que tener al menos " + age;
 				return true;
-			}
+			},
+			this__or__field: function(r){
+				n=r.args[0];
+				var otherval=$('#'+n).val();
+				var v = r.val()
+				if(v=="" && otherval=="")
+				return "Rellena este campo o "+n;
+				return true;
+			},
 		});
 		
 		// Group validation rules
