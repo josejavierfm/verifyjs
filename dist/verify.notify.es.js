@@ -3,8 +3,11 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.3
+	* v 1.3.6
 	* changelog
+	- 1.3.6 correccion de error en funcion this__or__field cuando está deshabilitado
+	- 1.3.5 permitir acentos y ñ en tipo texto
+	- 1.3.4 si el campo esta dentro de una tabla falla la posicion- corregido
 	- 1.3.3 maxEqualVal y minEqualVal,  poder indicar si tiene que tener entre dos valores, el del campo y otro (por id) this__or__field y ademas cualquier regla que contenga __ se evalua siempre aunque no tenga texto
 	- 1.3.2 emails , varios separados por coma
 	- 1.3.1 nuevo tipo, incluye por lo menos un numero
@@ -433,8 +436,16 @@ function padverify_j_manual(width, tstring, padding) {
 				oppFull = positions[opp];
 				css = {};
 				css[oppFull] = pMain === 'b' ? elemH : pMain === 'r' ? elemW : 0;
-				incr(css, 'top', elemPos.top - wrapPos.top);
-				incr(css, 'left', elemPos.left - wrapPos.left);
+				if ((elemPos.top - wrapPos.top)<0){
+					incr(css, 'top', elemPos.top );
+				}else{
+					incr(css, 'top', elemPos.top - wrapPos.top);
+				}
+				if ((elemPos.left - wrapPos.left)<0){
+					incr(css, 'left', elemPos.left );
+				}else{
+					incr(css, 'left', elemPos.left - wrapPos.left);
+				}
 				_ref = ['top', 'left'];
 				for (_i = 0, _len = _ref.length; _i < _len; _i++) {
 					pos = _ref[_i];
@@ -2459,7 +2470,7 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Usa solo numeros y letras"
 			},
 			seo: {
-				regex: /^[0-9A-Za-z\-]+$/,
+				regex: /^[0-9A-Za-z_\-]+$/,
 				message: "Usa solo numeros y letras y guiones"
 			},
 			sinsimbolos: {
@@ -2471,7 +2482,7 @@ function padverify_j_manual(width, tstring, padding) {
 				message: "Tiene que tener algun numero"
 			},
 			texto: {
-				regex: /^[0-9A-Za-z ]+$/,
+				regex: /^[0-9A-Za-záéíóúñÁÉÍÓÚÑ,. ]+$/,
 				message: "Usa solo numeros y letras, no permite simbolos ni saltos de linea"
 			},
 			street_number: {
@@ -2832,7 +2843,9 @@ function padverify_j_manual(width, tstring, padding) {
 				n=r.args[0];
 				var otherval=$('#'+n).val();
 				var v = r.val()
-				if(v=="" && otherval=="")
+				var camp1=$('#'+r.field[0].id).prop('disabled');
+				var camp2=$('#'+n).prop('disabled');
+				if(v=="" && otherval=="" && !camp1 && !camp2)
 				return "Rellena este campo o "+n;
 				return true;
 			},
