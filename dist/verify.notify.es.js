@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.6
+	* v 1.3.7
 	* changelog
+	- 1.3.7 mensaje personalizado required
 	- 1.3.6 correccion de error en funcion this__or__field cuando está deshabilitado
 	- 1.3.5 permitir acentos y ñ en tipo texto
 	- 1.3.4 si el campo esta dentro de una tabla falla la posicion- corregido
@@ -2525,10 +2526,14 @@ function padverify_j_manual(width, tstring, padding) {
 			required: {
 				
 				fn: function(r) {
+					
 					return r.requiredField(r, r.field);
 				},
 				
 				requiredField: function(r, field) {
+					var mensajepersonalizado = r.args[0];
+					console.log(mensajepersonalizado);
+
 					var v = field.val();
 					if (!j_skip_required){
 						switch (field.prop("type")) {
@@ -2545,14 +2550,27 @@ function padverify_j_manual(width, tstring, padding) {
 							if (group.is(":checked"))
 							break;
 							
-							if (group.length === 1)
-							return r.messages.single;
-							
-							return r.messages.multiple;
+							if (group.length === 1){
+								if (mensajepersonalizado!=undefined){
+									return mensajepersonalizado;
+								}else{
+									return r.messages.single;
+								}
+							}
+							if (mensajepersonalizado!=undefined){
+								return mensajepersonalizado;
+							}else{
+								return r.messages.multiple;
+							}
 							
 							default:
-							if (! $.trim(v))
-							return r.messages.all;
+							if (! $.trim(v)){
+								if (mensajepersonalizado!=undefined){
+									return mensajepersonalizado;
+								}else{
+									return r.messages.all;
+								}
+							}
 							break;
 						}
 					}
