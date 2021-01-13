@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.7
+	* v 1.3.8
 	* changelog
+	- 1.3.8 dni
 	- 1.3.7 mensaje personalizado required
 	- 1.3.6 correccion de error en funcion this__or__field cuando está deshabilitado
 	- 1.3.5 permitir acentos y ñ en tipo texto
@@ -2522,6 +2523,30 @@ function padverify_j_manual(width, tstring, padding) {
 					return r.message;
 				},
 				message: " IBAN is not valid, 24 characters without spaces"
+			},
+			dni: {
+				fn: function(r) {
+					datoiban=r.val();
+					//cif [PQSNWR][0-9][0-9][0-9][0-9][0-9][0-9][0-9][A-Z0-9] || [ABCDEFGHJUV][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+					//nie [XYZT][0-9][0-9][0-9][0-9][0-9][0-9][0-9][A-Z0-9]
+					//nif [KLM0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][a-zA-Z0-9]
+					regex: /^[0-9A-Za-z]+$/,
+					re_cif1 = new RegExp(/^[PQSNWR][0-9][0-9][0-9][0-9][0-9][0-9][0-9][A-Z0-9]$/);
+					re_cif2 = new RegExp(/^[ABCDEFGHJUV][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/);
+					re_nie = new RegExp(/^[XYZT][0-9][0-9][0-9][0-9][0-9][0-9][0-9][A-Z0-9]$/);
+					re_nif = new RegExp(/^[KLM0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][a-zA-Z0-9]$/);
+					if(r.val().match(re_cif1) 
+						|| r.val().match(re_cif2)
+						|| r.val().match(re_nie)
+						|| r.val().match(re_nif)
+						 ){
+							return true;
+						}
+
+					
+					return r.message;
+				},
+				message: "Spanish ID is not valid"
 			},
 			required: {
 				
