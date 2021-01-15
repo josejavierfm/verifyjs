@@ -3,8 +3,9 @@
 	* Copyright (c) 2013 Jaime Pillora - MIT
 	* Modificado por José Javier Fdez 2020
 	* textos español
-	* v 1.3.8
+	* v 1.3.9
 	* changelog
+	- 1.3.9 maxIntField y minIntField , maxEqualIntField y minEqualIntField
 	- 1.3.8 dni
 	- 1.3.7 mensaje personalizado required
 	- 1.3.6 correccion de error en funcion this__or__field cuando está deshabilitado
@@ -2829,6 +2830,62 @@ function padverify_j_manual(width, tstring, padding) {
 			  if(firstDate!="" && firstDate!=null){
 				 if(current >= firstDate)
 					return "La fecha tiene que ser menor al campo "+n;
+			  }
+			  
+			  return true;
+			},
+			maxIntField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current =r.val();
+			   
+
+			  var otherval = c.val();
+			  if(otherval!="" && otherval!=null){
+				 if(current >= otherval)
+					return "El valor tiene que ser menor a "+otherval;
+			  }
+			  
+			  return true;
+			},
+			minIntField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current =r.val();
+			   
+
+			  var otherval = c.val();
+			  if(otherval!="" && otherval!=null){
+				 if(current <= otherval)
+					return "El valor tiene que ser mayor a "+otherval;
+			  }
+			  
+			  return true;
+			},
+			maxEqualIntField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current =r.val();
+			   
+
+			  var otherval = c.val();
+			  if(otherval!="" && otherval!=null){
+				 if(current > otherval)
+					return "El valor tiene que ser menor o igual a "+otherval;
+			  }
+			  
+			  return true;
+			},
+			minEqualIntField: function(r) {
+				n=r.args[0];
+				c=$('#'+n);
+			   var current =r.val();
+			   
+
+			  var otherval = c.val();
+			  if(otherval!="" && otherval!=null){
+				 if(current <= otherval)
+					return "El valor tiene que ser mayor o igual a "+otherval;
 			  }
 			  
 			  return true;
